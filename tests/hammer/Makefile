@@ -1,4 +1,4 @@
-CFLAGS = -Wall -O2
+override CFLAGS := -Wall -O2 $(CFLAGS)
 
 TARGET = getlocks
 OBJFILES = getlocks.o sendrecvloop.o
