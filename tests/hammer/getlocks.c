@@ -3,10 +3,15 @@
 #include <string.h>
 #include <time.h>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#ifdef WIN32
+	#include <winsock2.h>
+	#include <ws2tcpip.h>
+#else
+	#include <unistd.h>
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <netdb.h>
+#endif
 
 #include "sendrecvloop.h"
 
@@ -48,6 +53,11 @@ int createAndConnectSocket(const char *address, const char *port)
 	int sock;
 	int ret;
 
+#ifdef WIN32
+	WSADATA unusedWSAData;
+	WSAStartup(0x0002, &unusedWSAData);
+#endif
+	
 	memset(&addrInfoHints, 0, sizeof(addrInfoHints));
 	addrInfoHints.ai_family   = AF_UNSPEC;   //IPv4 or IPv6
 	addrInfoHints.ai_socktype = SOCK_STREAM; //TCP
